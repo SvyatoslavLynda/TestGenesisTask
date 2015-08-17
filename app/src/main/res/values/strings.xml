@@ -1,0 +1,5 @@
+<resources>
+	<string name="app_name">TestGenesisTask</string>
+
+	<string name="message_fail_load">Load fail!</string>
+</resources>
