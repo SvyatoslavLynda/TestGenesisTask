@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
@@ -20,7 +18,6 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -90,6 +87,14 @@ public class MainActivity extends AppCompatActivity
 	{
 		super.onStart();
 		getSupportLoaderManager().initLoader(API_LOADER_ID, null, this).forceLoad();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		_webView.stopLoading();
+		_webView.destroy();
 	}
 
 	@Override
@@ -199,32 +204,15 @@ public class MainActivity extends AppCompatActivity
 		@Override
 		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
 		{
-			final Display display = getWindowManager().getDefaultDisplay();
-			int width;
-			int height;
-			final int activityMargin = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
-
-			if (Build.VERSION.SDK_INT == Build.VERSION_CODES.HONEYCOMB_MR2) {
-				final Point point = new Point();
-				display.getSize(point);
-				width = point.x - 2 * activityMargin;
-				height = width * point.y / loadedImage.getWidth();
-			} else {
-				//noinspection deprecation
-				width = display.getWidth() - 2 * activityMargin;
-				//noinspection deprecation
-				height = width * display.getHeight() / loadedImage.getWidth();
-			}
-
-			if (width > height) {
-				width = loadedImage.getWidth();
-				height = loadedImage.getHeight();
-			}
+			final int width =
+				_content.getWidth() < loadedImage.getWidth() ? _content.getWidth() : loadedImage.getWidth();
+			final int height = loadedImage.getHeight() * width / loadedImage.getWidth();
 
 			final BitmapDrawable d = new BitmapDrawable(getResources(), loadedImage);
 			_drawable.addLevel(1, 1, d);
 			_drawable.setBounds(0, 0, width, height);
 			_drawable.setLevel(1);
+
 			final CharSequence t = _content.getText();
 			_content.setText(t);
 		}
