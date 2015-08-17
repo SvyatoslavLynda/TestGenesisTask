@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity
 			ImageLoader.getInstance().displayImage(obj.getString(KEY_IMG), _img);
 			final String content = obj.getString(KEY_CONTENT);
 			_content.setText(Html.fromHtml(content, MainActivity.this, null));
-			final String iFrame = content.replaceAll(".*(<iframe.*?\\/iframe>).*", "$1");
+			final String iFrame = content.replaceAll(".*(<iframe.*?/iframe>).*", "$1");
 			_webView.loadData(iFrame, "text/html", "UTF-8");
 		} catch (JSONException | ParseException e) {
 			Log.e(LOG_TAG, e.getMessage());
@@ -208,12 +208,12 @@ public class MainActivity extends AppCompatActivity
 				final Point point = new Point();
 				display.getSize(point);
 				width = point.x - 2 * activityMargin;
-				height = point.y / loadedImage.getWidth() * loadedImage.getHeight();
+				height = width * point.y / loadedImage.getWidth();
 			} else {
 				//noinspection deprecation
 				width = display.getWidth() - 2 * activityMargin;
 				//noinspection deprecation
-				height = display.getHeight() / loadedImage.getWidth() * loadedImage.getHeight();
+				height = width * display.getHeight() / loadedImage.getWidth();
 			}
 
 			if (width > height) {

@@ -51,8 +51,6 @@ public class AppUtils
 			.showImageOnLoading(android.R.color.transparent)
 			.showImageForEmptyUri(android.R.color.transparent)
 			.showImageOnFail(android.R.color.transparent)
-//			.showImageOnFail(android.R.drawable.)
-//			.showImageOnLoading(R.drawable.ic_picture)
 			.cacheInMemory(true)
 			.cacheOnDisk(true)
 			.imageScaleType(ImageScaleType.EXACTLY)
